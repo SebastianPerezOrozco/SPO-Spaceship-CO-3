@@ -2,7 +2,7 @@ import pygame
 import random
 from pygame.sprite import Sprite
 
-from game.utils.constants import ENEMY_1, ENEMY_TYPE, SCREEN_HEIGHT, SCREEN_WIDTH
+from game.utils.constants import ENEMY_1, ENEMY_2, ENEMY_TYPE, SCREEN_HEIGHT, SCREEN_WIDTH
 
 LEFT = 'left'
 RIGHT = 'right'
@@ -14,8 +14,9 @@ class Enemy(Sprite):
     SPEED_Y = 1
     MOVEMENTS = [LEFT, RIGHT]
 
-    def __init__(self):
-        self.image = pygame.transform.scale(ENEMY_1,(50, 50))
+    def __init__(self,enemy):
+
+        self.image = pygame.transform.scale(enemy,(50, 50))
         self.rect = self.image.get_rect()
         self.rect.x = random.choice(self.X_POS_LIST)
         self.rect.y = self.Y_POS
@@ -29,6 +30,7 @@ class Enemy(Sprite):
         self.moving_index = 0
 
     def update(self, ships):
+
         self.rect.y += self.speep_y
         
         if self.movement == LEFT:
