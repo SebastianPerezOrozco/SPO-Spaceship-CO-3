@@ -41,6 +41,19 @@ class Spaceship(Sprite):
         elif user_input[pygame.K_DOWN]:
             self.move_down()
 
+        # elif user_input[pygame.K_LEFT] and user_input[pygame.K_UP]:
+        #     self.move_left() 
+        #     self.move_up()
+        # elif user_input[pygame.K_LEFT] and user_input[pygame.K_DOWN]:
+        #     self.move_left()
+        #     self.move_down()
+        # elif user_input[pygame.K_RIGHT] and user_input[pygame.K_UP]:
+        #     self.move_right()
+        #     self.move_up()
+        # elif user_input[pygame.K_RIGHT] and user_input[pygame.K_DOWN]:
+        #     self.move_right()
+        #     self.move_down()
+
     def draw(self, screen):
         screen.blit(self.image, (self.rect.x, self.rect.y))
 
