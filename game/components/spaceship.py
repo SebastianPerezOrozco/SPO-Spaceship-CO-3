@@ -20,13 +20,13 @@ class Spaceship(Sprite):
 
     def move_left(self):
         self.rect.x -= 10
-        # if self.rect.right < 0:
-        #     self.rect.x = SCREEN_WIDTH
+        if self.rect.right < 0:
+            self.rect.x = SCREEN_WIDTH
 
     def move_right(self):
         self.rect.x += 10
-        # if self.rect.left > SCREEN_WIDTH:
-        #     self.rect.x = 0
+        if self.rect.left > SCREEN_WIDTH:
+            self.rect.x = 0
 
     def move_up(self):
         if self.rect.y > SCREEN_HEIGHT // 2:
@@ -45,39 +45,24 @@ class Spaceship(Sprite):
         if user_input[pygame.K_LEFT]:
             self.move_left()
 
-        elif user_input[pygame.K_RIGHT]:
+        if user_input[pygame.K_RIGHT]:
             self.move_right()
 
-        elif user_input[pygame.K_UP]:
+        if user_input[pygame.K_UP]:
             self.move_up()
 
-        elif user_input[pygame.K_DOWN]:
+        if user_input[pygame.K_DOWN]:
             self.move_down()
         
-        elif user_input[pygame.K_SPACE]:
+        if user_input[pygame.K_SPACE]:
             self.shoot_bullet(game.bullet_manager)
 
-        # elif user_input[pygame.K_SPACE]:  # Verifica si se presiona la tecla Espacio
-        #     self.shoot_bullet(game.bullet_manager)
-
-        # elif user_input[pygame.K_LEFT] and user_input[pygame.K_UP]:
-        #     self.move_left() 
-        #     self.move_up()
-        # elif user_input[pygame.K_LEFT] and user_input[pygame.K_DOWN]:
-        #     self.move_left()
-        #     self.move_down()
-        # elif user_input[pygame.K_RIGHT] and user_input[pygame.K_UP]:
-        #     self.move_right()
-        #     self.move_up()
-        # elif user_input[pygame.K_RIGHT] and user_input[pygame.K_DOWN]:
-        #     self.move_right()
-        #     self.move_down()
 
     def draw(self, screen):
         screen.blit(self.image, (self.rect.x, self.rect.y))
 
-        if self.rect.left < 0:
-            screen.blit(self.image, (self.rect.left + SCREEN_WIDTH, self.rect.y))
-
-        elif self.rect.right > SCREEN_WIDTH:
-            screen.blit(self.image, (self.rect.left - SCREEN_WIDTH, self.rect.y))
+        # if self.rect.left < 0:
+        #     screen.blit(self.image, (self.rect.left + SCREEN_WIDTH, self.rect.y))
+            
+        # if self.rect.right > SCREEN_WIDTH:
+        #     screen.blit(self.image, (self.rect.left - SCREEN_WIDTH, self.rect.y))

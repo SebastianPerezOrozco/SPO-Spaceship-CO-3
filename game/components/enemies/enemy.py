@@ -1,3 +1,4 @@
+import math
 import pygame
 import random
 from pygame.sprite import Sprite
@@ -10,7 +11,7 @@ RIGHT = 'right'
 
 class Enemy(Sprite):
     X_POS_LIST = [20, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900]
-    Y_POS = 20
+    Y_POS = -5
     SPEED_X = 5
     SPEED_Y = 1
     MOVEMENTS = [LEFT, RIGHT]
@@ -30,6 +31,8 @@ class Enemy(Sprite):
         self.move_x = random.randint(30, 100)
         self.moving_index = 0
         self.shooting_time = random.randint(30,50)
+        self.amplitude = 30  # Amplitud del movimiento
+        self.frequency = 0.01
 
     def update(self, ships, game):
 
@@ -37,11 +40,14 @@ class Enemy(Sprite):
         self.shoot(game.bullet_manager)
 
         if self.enemy == ENEMY_2:
-
+            
             if self.movement == LEFT:
-                self.rect.x -= 2
+                self.rect.x -= 10
+                self.rect.y = self.amplitude * math.sin(self.frequency * self.rect.x)
             else:
-                self.rect.x += 2
+                self.rect.x += 10
+                self.rect.y = self.amplitude * math.sin(self.frequency * self.rect.x)
+        
         else:
             if self.movement == LEFT:
                 self.rect.x -= self.speed_x
