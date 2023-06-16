@@ -2,9 +2,10 @@ import pygame
 from game.components.bullets.bullet_manager import BulletManager
 from game.components.enemies.enemy_manager import EnemyManager
 from game.components.menu import Menu
+from game.components.pause import Pause
 from game.components.spaceship import Spaceship
 
-from game.utils.constants import BG, FONT_STYLE, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, DEFAULT_TYPE
+from game.utils.constants import BG, FONT_STYLE, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS
 
 
 class Game:
@@ -21,6 +22,7 @@ class Game:
         self.y_pos_bg = 0
         self.score = 0
         self.death_count = 0
+        self.max_score = 0
 
         self.player = Spaceship()
         self.enemy_manager = EnemyManager()
@@ -32,17 +34,21 @@ class Game:
         self.running = True
         while self.running:
             if not self.playing:
-                self.show_menu()
+                self.show_menu(self)
 
         pygame.display.quit()
         pygame.quit()
 
     def play(self):
         self.playing = True
+        self.score = 0
         while self.playing:
             self.events()
             self.update()
             self.draw()
+
+            if self.score > self.max_score:
+                self.max_score = self.score
         
     def events(self):
         for event in pygame.event.get():
@@ -88,12 +94,23 @@ class Game:
         self.screen.blit(text, text_rect)
 
 
-    def show_menu(self):
+    def show_menu(self, game):
         if self.death_count > 0:
-            self.menu.update_message("Other message")
+            self.menu.update_message(f"Final score is: {game.score} points" )
+            self.menu.update_max_score_value(game.max_score)
+            pause_menu = Pause(self)
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    key_pressed = event.key
 
-        self.menu.draw(self.screen)
-        self.menu.event(self.on_close, self.play)
+                    if key_pressed == pygame.K_RETURN:
+                        pause_menu.restart_game()
+                    elif key_pressed == pygame.K_ESCAPE:
+                        pause_menu.close_game()
+        
+
+        self.menu.draw(game.screen)
+        self.menu.event(self.on_close, game.play)
 
     def on_close(self):
         self.playing = False
