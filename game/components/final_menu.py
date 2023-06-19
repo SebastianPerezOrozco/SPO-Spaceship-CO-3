@@ -23,12 +23,11 @@ class FinalMenu:
 
     def event(self, on_close, on_start):
         for event in pygame.event.get():
-            if event.type == pygame.QUIT or event.key == pygame.K_RETURN:
+            if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN) : 
                 on_close()
-                pygame.quit()
-                quit()
-            if event.key == pygame.K_SPACE:
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 on_start()
+
         
 
     def update(self, game):

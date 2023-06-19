@@ -3,6 +3,7 @@ from game.components.bullets.bullet_manager import BulletManager
 from game.components.enemies.enemy_manager import EnemyManager
 from game.components.final_menu import FinalMenu
 from game.components.menu import Menu
+from game.components.pause import Pause
 from game.components.powerups.manager import Manager
 from game.components.spaceship import Spaceship
 
@@ -18,6 +19,7 @@ class Game:
         self.clock = pygame.time.Clock()
         self.playing = False
         self.running = False
+        self.paused = False
         self.game_speed = 10
         self.x_pos_bg = 0
         self.y_pos_bg = 0
@@ -33,6 +35,7 @@ class Game:
 
         self.menu = Menu("||Press any key [ ] to start||")
         self.final_menu = FinalMenu()
+        self.pause = Pause()
 
     def run(self):
         self.running = True
@@ -47,8 +50,12 @@ class Game:
         self.score = 0
         while self.playing:
             self.events()
-            self.update()
+            if not self.paused:
+                self.update()
             self.draw()
+            if self.paused:
+                self.pause.draw(self.screen)
+                self.pause.event(self.on_close, self.off_paused) 
 
     def events(self):
         for event in pygame.event.get():
@@ -58,6 +65,8 @@ class Game:
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE or  event.type == pygame.MOUSEBUTTONUP:
                     self.player.shoot_bullet(self.bullet_manager)
+                elif event.key == pygame.K_p:
+                    self.paused = not self.paused
         
     def update(self):
         user_input = pygame.key.get_pressed()
@@ -69,13 +78,17 @@ class Game:
     def draw(self):
         self.clock.tick(FPS)
         self.screen.fill((255, 255, 255))
-        self.draw_background()
-        self.draw_score()
-        self.draw_shield_time()
-        self.player.draw(self.screen)
-        self.enemy_manager.draw(self.screen)
-        self.bullet_manager.draw(self.screen)
-        self.power_up_manager.draw(self.screen)
+
+        if self.paused:
+            self.pause.draw(self.screen)
+        else:    
+            self.draw_background()
+            self.draw_score()
+            self.draw_shield_time()
+            self.player.draw(self.screen)
+            self.enemy_manager.draw(self.screen)
+            self.bullet_manager.draw(self.screen)
+            self.power_up_manager.draw(self.screen)
         pygame.display.update()
         pygame.display.flip()
 
@@ -119,7 +132,11 @@ class Game:
     def on_close(self):
         self.playing = False
         self.running = False
+        self.paused = False
 
+    def off_paused(self):
+        self.paused = False
+        
     def reset(self):
         self.bullet_manager.reset()
         self.enemy_manager.reset()
