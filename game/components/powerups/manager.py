@@ -33,11 +33,11 @@ class Manager:
                 game.player.set_image((70, 50), SPACESHIP_SHIELD)
                 self.power_ups .remove(power_up)
 
-            if game.player.has_power_up and current_time >= game.player.power_up_time:
-                game.player.has_power_up = False
-                game.player.power_up_type = None
-                game.player.set_image((60, 40), SPACESHIP)
-                game.player.shield_start_time = 0
+        if game.player.has_power_up and current_time >= game.player.power_up_time:
+            game.player.has_power_up = False
+            game.player.power_up_type = None
+            game.player.set_image((60, 40), SPACESHIP)
+            game.player.shield_start_time = 0
 
     def draw (self, screen):
         for power_up in self.power_ups:

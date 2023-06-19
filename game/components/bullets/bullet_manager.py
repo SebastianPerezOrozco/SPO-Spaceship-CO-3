@@ -36,7 +36,7 @@ class BulletManager:
             for enemy in game.enemy_manager.enemies:
                 if bullet.rect.colliderect(enemy.rect):
                     game.enemy_manager.enemies.remove(enemy)
-                    print(len(self.bullets))
+                    # print(len(self.bullets))
                     self.bullets.remove(bullet)
                     game.score += 1
                     game.enemy_manager.update(game)
