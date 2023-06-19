@@ -2,7 +2,7 @@
 
 import pygame
 from game.components.bullets.bullet import Bullet
-from game.utils.constants import ENEMY_TYPE, SPACESHIP_TYPE
+from game.utils.constants import ENEMY_TYPE, SHIELD_TYPE, SPACESHIP_TYPE
 
 
 class BulletManager:
@@ -16,26 +16,30 @@ class BulletManager:
             bullet.update(self.enemy_bullets)
             if bullet.rect.colliderect(game.player.rect):
                 self.enemy_bullets.remove(bullet)
-                game.playing = False
-                game.death_count += 1
-                pygame.time.delay(1000)
-                break
-        
+                if game.player.power_up_type != SHIELD_TYPE:
+                    game.playing = False
+                    game.death_count += 1
+                    pygame.time.delay(1000)
+                    break
+                
+        for enemy in game.enemy_manager.enemies:
+            if enemy.rect.colliderect(game.player.rect):
+                game.enemy_manager.enemies.remove(enemy)
+                if game.player.power_up_type != SHIELD_TYPE:
+                    game.playing = False
+                    game.death_count += 1
+                    pygame.time.delay(1000)
+                    break
+
         for bullet in self.bullets:
             bullet.update(self.bullets)
             for enemy in game.enemy_manager.enemies:
                 if bullet.rect.colliderect(enemy.rect):
                     game.enemy_manager.enemies.remove(enemy)
-                    # print(len(self.bullets))
+                    print(len(self.bullets))
                     self.bullets.remove(bullet)
                     game.score += 1
                     game.enemy_manager.update(game)
-                
-        
-            # if bullet.rect.colliderect(game.enemy.rect):
-            #     self.bullets.remove(bullet)
-            #     game.enemy.remove(self)
-
 
     def draw(self, screen):
         for bullet in self.enemy_bullets:
@@ -50,4 +54,9 @@ class BulletManager:
             
         if bullet.owner == SPACESHIP_TYPE and len(self.bullets) < 3:
             self.bullets.append(bullet)
+
+    def reset(self):
+        self.bullets.clear()
+        self.enemy_bullets.clear()
+
         
